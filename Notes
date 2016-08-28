@@ -1,0 +1,125 @@
+------------------------------------------------------------------------------------------
+Help
+
+1. Press C-hw
+2. Type the name of the command: kill-buffer (you can also use tab/space to autocomplete :))
+3. Press RET
+
+During the exercise, if something happens, for example, you press the wrong keys and 
+Emacs is behaving weird, just press C-g.
+
+------------------------------------------------------------------------------------------
+Another interesting command in Emacs is find-file-at-point. 
+What this function does is that if you have a path to a directory or file under point, 
+M-x ffap opens that directory or file directly!
+
+ For now, if you open the directory, close the current listing by C-x k and press RET.
+You select a directory in find-file prompt by pressing RET, not TAB like ordinary find-file.
+
+Exercise: Practice C-x b to get used to it.
+
+
+
+
+
+-------------------------------------------------------------------------------------
+Buffer
+
+You can create new buffers with switch-to-buffer. Type C-x b, enter a buffer name, 
+and press RET. 
+
+If no buffer with that name exists, Emacs creates a new one automatically in Fundamental Mode
+Key	Binding
+
+C-x C-s	Command: save-buffer
+ 	Save the buffer at point
+	
+C-x C-w	Command: write-file
+ 	Save the buffer to a different file
+	
+C-x b	Command: switch-to-buffer
+ 	Switch to a different buffer
+	
+Buffers :
+C-x b   open/create buffer
+C-x k	kills-buffer
+C-x o 	takes me to the other window. 
+	
+C-x k	Command: kill-buffer
+ 	Kill a buffer. RET to kill the
+ 	currently active one
+
+/ f ^/var/www/ RET: filter buffer list to show only filenames starting with /var/www/.
+/ s Web filters RET: name and save active filter set to your init file.
+/ g Web development RET: create a named group from the active filters.
+
+--------------------------------------------------------------------------------------
+
+Copy
+ C-space : Starts marking/highligting a region.
+ M-w     : Copies this region into the clipboard.
+ C-w     : Cuts this region into the clipboard (deletes the region and copies it to clipbrd)
+
+--------------------------------------------------------------------------------------
+Paste
+
+C-y     : Pastes whatever is in the clipboard at the cursor.
+
+--------------------------------------------------------------------------------------
+Cut
+C-w     : Cuts this region into the clipboard (deletes the region and copies it to clipbrd)
+
+
+// If you dont like the region you are selecting, hit C-g.
+// C-g     : Always quits your command.
+
+--------------------------------------------------------------------------------------
+Switching Line
+
+Move to beginning of line: C-a
+Move to end of line: C-e
+Move forward one word, M-f.
+Move backward one word, M-b.
+
+--------------------------------------------------------------------------------------
+Switching Paragraph
+
+
+Recenter a screen: C-l
+Re-position point to the top, middle and bottom of the current screen: M-r
+Move to top of the buffer: M-<
+Move to end of the buffer: M->
+Move to the nth character: M-g c (c stands for character)
+Move to the nth line: M-g l for Emacs < 23.2, M-g g for emacs >= 23.2) (l/g stands for line)
+
+
+--------------------------------------------------------------------------------------
+Windows 
+
+C-x 0 	takes me to the other window. 
+C-x 1	which closes any other windows in the frame, maximising the current one
+C-x 2	splitting the window is done with horizontal
+C-x 3	splitting the window is done with vertical
+
+--------------------------------------------------------------------------------------
+Switching Windows
+
+Move to the beginning of a sentence: M-a
+Move to the end of a sentence: M-e
+
+--------------------------------------------------------------------------------------
+Adjusting window 
+Scroll forward one screen: C-v, page down
+Scroll backward one screen: M-v, page up
+centre
+
+--------------------------------------------------------------------------------------
+
+Commands:
+---------
+ Emacs understands elisp. It is a dialect of lisp.
+ M-x command-name : Will execute the command. 
+ M-x pwd  : Prints the working directory
+ M-x indent-region : Indents the region.
+
+--------------------------------------------------------------------------------------

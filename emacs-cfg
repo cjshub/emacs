@@ -1,0 +1,397 @@
+;;(load "db-functions.el")
+
+(add-to-list 'load-path "/home/username/.emacs.d/smart/")
+(add-to-list 'load-path "/home/username/.emacs.d/color-theme-6.6.0/")
+(load "smart-compile.el")
+(require 'ido)
+(require 'color-theme)
+(require 'paren)
+(require 'uniquify)
+(require 'smart-compile)
+
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     (color-theme-hober)))
+(color-theme-dark-laptop)
+;;(set-variable inhibit-startup-message t )
+;;(set-variable inhibit-start-up-echo-area-message t)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(initial-frame-alist (quote ((fullscreen . maximized))))
+ '(blink-cursor-mode nil)
+ '(c-default-style (quote ((c++-mode . "stroustrup") (java-mode . "java") (awk-mode . "awk") (other . "gnu"))))
+ '(c-doc-comment-style (quote ((c-mode . gtkdoc) (c++-mode . gtkdoc) (java-mode . javadoc) (pike-mode . autodoc))))
+ '(c-hanging-braces-alist (quote set-from-style))
+ '(c-hungry-delete-key t t)
+ '(c-ignore-auto-fill (quote (string cpp code)))
+ '(c-offsets-alist (quote ((inline-open . 0) (case-label . +) (innamespace . 0))))
+ '(column-number-mode t)
+ '(compilation-auto-jump-to-first-error t)
+ '(compilation-read-command nil)
+ '(compilation-scroll-output t)
+ '(display-battery-mode t)
+ '(display-time-mode t)
+ '(fringe-mode 0 nil (fringe))
+ '(grep-find-command "rgrep")
+ '(indent-tabs-mode nil)
+ '(midnight-delay 3600)
+ '(save-place t nil (saveplace))
+ '(scroll-bar-mode nil)
+ '(show-paren-mode t)
+ '(size-indication-mode t)
+ '(tab-width 4)
+ '(tool-bar-mode nil)
+ '(menu-bar-mode nil)
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "outline" :family "Verdana"))))
+ '(ediff-current-diff-B ((((class color) (min-colors 16)) (:background "yellow" :foreground "blue"))))
+ '(ediff-even-diff-Ancestor ((((class color) (min-colors 16)) (:background "grey40" :foreground "white"))))
+ '(ediff-even-diff-B ((((class color) (min-colors 16)) (:background "grey40" :foreground "white"))))
+ '(ediff-odd-diff-A ((((class color) (min-colors 16)) (:background "grey40" :foreground "white"))))
+ '(ediff-odd-diff-C ((((class color) (min-colors 16)) (:background "Grey" :foreground "Black"))))
+ '(font-lock-builtin-face ((t (:foreground "lightseagreen"))))
+ '(font-lock-comment-face ((t (:foreground "sienna"))))
+ '(font-lock-constant-face ((t (:foreground "grey"))))
+ '(font-lock-doc-face ((t (:inherit font-lock-comment-face))))
+ '(font-lock-function-name-face ((t (:foreground "grey"))))
+ '(font-lock-keyword-face ((t (:foreground "lightseagreen"))))
+ '(font-lock-string-face ((t (:foreground "burlywood"))))
+ '(font-lock-type-face ((t (:foreground "lightseagreen"))))
+ '(font-lock-variable-name-face ((t (:foreground "grey"))))
+ '(font-lock-warning-face ((t (:foreground "tomato"))))
+ '(highlight ((t (:background "grey15"))))
+ '(show-paren-match ((nil (:background "green" :foreground "black")))))
+;;(add-to-list 'load-path "/devshared/home/gaikwaja/bin")
+(autoload 'gtags-mode "gtags" "" t)
+
+ 
+;; Turn off that big useless toolbar
+;;(tool-bar-mode 0)
+;;(menu-bar-mode 0)
+ 
+;;turn off startup splash screen
+(setq inhibit-startup-message t
+  inhibit-startup-echo-area-message t)
+ 
+(global-subword-mode t) ;;will move cursor into between CamelCaseWords
+ 
+(setq color-theme-is-global t)
+;;(setq uniquify-buffer-name-style 'forward)
+(color-theme-initialize)
+(color-theme-charcoal-black)
+(color-theme-dark-laptop)
+ 
+;; Switch fromm *.<impl> to *.<head> and vice versa
+(defun toggle-source-header ()
+  (interactive)
+;;  (when (string-match "^\\(.*\\)\\.\\([^.]*\\)$" buffer-file-name)
+  (when (string-match "^\\(.*\\)\\.\\(.*\\)$" buffer-file-name)
+    (let ((name (match-string 1 buffer-file-name))
+          (suffix (match-string 2 buffer-file-name)))
+      (cond ((string-match suffix "hpp\\|hh\\|h\\|HPP\\|HH\\|H")
+             (cond ((file-exists-p (concat name ".cpp"))
+                    (find-file (concat name ".cpp")))
+                   ((file-exists-p (concat name ".hcpp"))
+                    (find-file (concat name ".hcpp")))
+                   ((file-exists-p (concat name ".cc"))
+                    (find-file (concat name ".cc")))
+                   ((file-exists-p (concat name ".c"))
+                    (find-file (concat name ".c")))
+                   ((file-exists-p (concat name ".CPP"))
+                    (find-file (concat name ".CPP")))
+                   ((file-exists-p (concat name ".CC"))
+                    (find-file (concat name ".CC")))
+                   ((file-exists-p (concat name ".icpp"))
+                    (find-file (concat name ".icpp")))
+                   ((file-exists-p (concat name ".iicpp"))
+                    (find-file (concat name ".iicpp")))
+                   ((file-exists-p (concat name ".C"))
+                    (find-file (concat name ".C")))))
+            ((string-match suffix "cpp\\|cc\\|c\\|CPP\\|CC\\|C\\|icpp\\|iicpp")
+             (cond ((file-exists-p (concat name ".hpp"))
+                    (find-file (concat name ".hpp")))
+                   ((file-exists-p (concat name ".hh"))
+                    (find-file (concat name ".hh")))
+                   ((file-exists-p (concat name ".h"))
+                    (find-file (concat name ".h")))
+                   ((file-exists-p (concat name ".HPP"))
+                    (find-file (concat name ".HPP")))
+                   ((file-exists-p (concat name ".HH"))
+                    (find-file (concat name ".HH")))
+                   ((file-exists-p (concat name ".H"))
+                    (find-file (concat name ".H")))))))))
+ 
+
+ 
+;; toggle between source & header files
+(global-set-key (kbd "<backtab>") 'toggle-source-header)
+ 
+;; C-x C-b
+(defun my-list-buffers (&optional files-only)
+  (interactive)
+  (list-buffers files-only)
+  (other-window 1))
+(global-set-key (kbd "C-x C-b") 'my-list-buffers)
+ 
+;; Previous shell commands
+(global-set-key (kbd "C-<up>") 'comint-previous-input)
+;; HOME AND END keys
+(global-set-key (kbd "<home>") 'beginning-of-buffer)
+(global-set-key (kbd "<end>") 'end-of-buffer) ;; for some reason end is select!
+(global-set-key (kbd "C-l") 'goto-line);; goto line
+;; Change all yes-or-no questions to y-or-n
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq kill-whole-line t) ;; will make "Ctrl-k" kills an entire line from the cursor postion
+(setq subword-mode t)
+;;set the curso
+;;(setq default-cursor-type 'bar)
+;;(set-default-font "consolas")
+ (require 'cl)
+  (defun font-candidate (&rest fonts)
+     "Return existing font which first match."
+     (find-if (lambda (f) (find-font (font-spec :name f))) fonts))
+(set-face-attribute 'default nil :font (font-candidate '"Consolas-10:weight=normal" "DejaVu Sans Mono-10:weight=normal"))
+
+ 
+;; ========== Support Wheel Mouse Scrolling ==========
+(mouse-wheel-mode t)
+ 
+;; ========== Place Backup Files in Specific Directory ==========
+;; Enable versioning with default values (keep five last versions, I think!)
+;;(setq version-control t)
+;; Save all backup file in this directory.
+(setq backup-directory-alist (quote ((".*" . "/devshared/home/gaikwaja/.emacs.d/autosave"))))
+(setq auto-save-list-file-prefix "/devshared/home/gaikwaja/.emacs.d/autosave/save-")
+(setq delete-old-versions t
+  kept-new-versions 5
+  kept-old-versions 1
+  version-control t)
+;; make backup to a designated dir, mirroring the full path
+(defun my-backup-file-name (fpath)
+  "Return a new file path of a given file path.
+If the new path's directories does not exist, create them."
+  (let* (
+        (backupRootDir "/devshared/home/gaikwaja/.emacs.d/backup")
+        (filePath (replace-regexp-in-string "[A-Za-z]:" "" fpath )) ; remove Windows driver letter in path, e.g. .C:.
+        (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
+        )
+    (make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
+    backupFilePath
+  )
+)
+(setq make-backup-file-name-function 'my-backup-file-name)
+(setq backup-by-copying t)
+ 
+;; Disable backup files.
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+ 
+;; ========== Enable Line and Column Numbering ==========
+(line-number-mode 1)
+(column-number-mode 1)
+;; ===== Function to delete a line =====
+;; First define a variable which will store the previous column position
+(defvar previous-column nil "Save the column position")
+
+(defun test()
+  (interactive) (concat "g++ -std=c++11 " (buffer-file-name (nth 1 (buffer-list)))))
+ 
+;; Define the nuke-line function. The line is killed, then the newline
+;; character is deleted. The column which the cursor was positioned at is then
+;; restored. Because the kill-line function is used, the contents deleted can
+;; be later restored by usibackward-delete-char-untabifyng the yank commands.
+
+
+(defun nuke-line()
+  "Kill an entire line, including the trailing newline character"
+  (interactive)
+  ;; Store the current column position, so it can later be restored for a more natural feel to the deletion
+  (setq previous-column (current-column))
+  (end-of-line)  ;; Now move to the end of the current line
+  ;; Test the length of the line. If it is 0, there is no need for a
+  ;; kill-line. All that happens in this case is that the new-line character
+  ;; is deleted.
+  (if (= (current-column) 0)
+    (delete-char 1)
+    ;; This is the 'else' clause. The current line being deleted is not zero
+    ;; in length. First remove the line by moving to its start and then
+    ;; killing, followed by deletion of the newline character, and then
+    ;; finally restoration of the column position.
+    (progn
+      (beginning-of-line)
+      (kill-line)
+      (delete-char 1)
+      (move-to-column previous-column))))
+ 
+;; Now bind the delete line function
+(global-set-key (kbd "C-d") 'nuke-line)
+(global-unset-key "\C-x\C-n")
+(global-set-key (kbd "\C-v") 'yank)
+ 
+;Fast switch windows
+(global-set-key (kbd "<M-right>") 'windmove-right)
+(global-set-key (kbd "<M-left>") 'windmove-left)
+(global-set-key (kbd "<M-up>") 'windmove-up)
+(global-set-key (kbd "<M-down>") 'windmove-down)
+ 
+;; Add C-T to toggle line wrap
+(global-set-key  (kbd "\C-t") 'toggle-truncate-lines)
+ 
+;;toggle line mode with f2
+(global-set-key (kbd "<f2>") 'linum-mode)
+ 
+(setq gtags-rootdir (getenv "PUMA_SVN_DIR"))
+(global-set-key (kbd "<f1>") 'gtags-find-file)
+(global-set-key (kbd "<f9>") 'gtags-find-tag-from-here)
+(global-set-key (kbd "<f12>") 'gtags-find-rtag)
+ 
+;;refresh
+(defun revert-buffer-no-confirm ()
+  "Revert buffer without confirmation."
+  (interactive) (revert-buffer t t))
+(global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
+(global-auto-revert-mode t)
+ 
+;;map killbuffer to windows f4 key
+(global-set-key (kbd "<f4>") 'kill-buffer-and-window)
+;;compile
+(global-set-key [f7] 'smart-compile)
+;;map recursive grep to rg
+(global-set-key (kbd "<f10>") 'grep-find)
+ 
+;; Get rid of keys hit accidentally:
+;;(global-unset-key "\M-c")    ; don't want the capitalize thing
+;; undefine the keys that do narrow-to-page and narrow-to-region,
+(global-unset-key "\C-xp")
+(global-unset-key "\C-xn")
+;;(global-set-key [f10] 'gdb-next)
+;;(global-set-key [f11] 'gdb-step)
+ 
+;;ido settings
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(global-set-key "\C-b" 'scroll-down)
+(global-set-key "\C-f" 'scroll-up)
+ 
+;;(define-key global-map (kbd "RET") 'newline-and-indent)
+(setq display-time-day-and-date t) (display-time)
+(show-paren-mode t) ;;will highlight matching parentheses next to cursor.
+;; Frame title bar formatting to show full path of file
+(setq-default
+frame-title-format
+(list '((buffer-file-name "%f" (dired-directory
+dired-directory
+(revert-buffer-function "%b"
+("%b  Dir:  "  default-directory)))))))
+ 
+(setq resize-minibuffer-mode 1)
+ 
+;; (defun path ()
+;;   (interactive "*")
+;;   (minibuffer "%s" buffer-file-name))
+ 
+(setq-default mode-line-buffer-identification
+              (list 'buffer-file-name
+                    (propertized-buffer-identification "%12f")
+                    (propertized-buffer-identification "%12b")))
+
+;; set gtags-mode for c/c++ files
+(setq c-mode-hook '(lambda () (gtags-mode 1)))
+(add-to-list 'smart-compile-alist
+             '(".*\\.[Cc]+[Pp]*$" . "g++ -std=c++14 -O2 -Wall -pedantic -Werror -Wreturn-type %f -o ~/bin/%n ")
+             )
+
+(add-hook 'dired-mode-hook
+          (lambda ()
+            ;; TODO: handle (DIRECTORY FILE ...) list value for dired-directory
+            (setq mode-line-buffer-identification
+                  ;; emulate "%17b" (see dired-mode):
+                  '(:eval
+                    (propertized-buffer-identification
+                     (if (< (length default-directory) 17)
+                         (concat default-directory
+                                 (make-string (- 17 (length default-directory))
+                                              ?\s))
+                       default-directory))))))
+ 
+;; Fix junk characters in shell mode
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'compilation-mode-hook 'ansi-color-for-comint-mode-on)
+(put 'dired-find-alternate-file 'disabled nil)
+ 
+;; -----------------------------------------------------------------------------
+;; ADD HOOKS
+;; -----------------------------------------------------------------------------
+;;
+;; deletes all trailing whitespaces before saving
+;;(add-hook 'before-save-hook 'delete-trailing-whitespace)
+ 
+;; changes the file coding system to unix before saving
+;; (add-hook 'before-save-hook 'set-unix-file-coding-system)
+ 
+;; will truncate shell buffer to comint-buffer-maximum-size.
+(add-hook 'comint-output-filter-functions 'comint-truncate-buffer)
+ 
+;; will disalllow passwords to be shown in clear text (this is useful,
+;; for example, if you use the shell and then, login/telnet/ftp/scp etc. to other machines).
+(add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
+ 
+;; will remove ctrl-m from shell output.
+(add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+ 
+;; shell mode hooks
+(add-hook 'shell-mode-hook
+          '(lambda ()
+             (local-set-key [home] ; move to beginning of line, after prompt
+                            'comint-bol)
+             (local-set-key [up] ; cycle backward through command history
+                            '(lambda () (interactive)
+                               (if (comint-after-pmark-p)
+                                   (comint-previous-input 1)
+                                 (previous-line 1))))
+             (local-set-key [down] ; cycle forward through command history
+                            '(lambda () (interactive)
+                               (if (comint-after-pmark-p)
+                                   (comint-next-input 1)
+                                 (forward-line 1))))))
+ 
+;; gud-mode (debugging with gdb)
+(add-hook 'gud-mode-hook
+          '(lambda ()
+             (local-set-key [home] ; move to beginning of line, after prompt
+                            'comint-bol)
+             (local-set-key [up] ; cycle backward through command history
+                            '(lambda () (interactive)
+                               (if (comint-after-pmark-p)
+                                   (comint-previous-input 1)
+                                 (previous-line 1))))
+             (local-set-key [down] ; cycle forward through command history
+                            '(lambda () (interactive)
+                               (if (comint-after-pmark-p)
+                                   (comint-next-input 1)
+                                 (forward-line 1))))))
+ 
+(defvar clean-buffer-list-timer nil
+  "Stores clean-buffer-list timer if there is one. You can disable clean-buffer-list by (cancel-timer clean-buffer-list-timer).")
+;; run clean-buffer-list every 1 hour
+(setq clean-buffer-list-timer (run-at-time t 3600 'clean-buffer-list))
+;; kill everything, clean-buffer-list is very intelligent at not killing
+;; unsaved buffer.
+(setq clean-buffer-list-kill-regexps '("*GTAGS SELECT*" "*Completions*" "*Echo Area.*"))
+
+(setq clean-buffer-list-delay-general 30) ;; change the expiration date of all buffers, to 30 days
+(setq clean-buffer-list-delay-special (* 1 60)) ;;change the expiration date of special buffers to 1 min
+;;(setq clean-buffer-list-kill-never-regexps '("*\.hpp" "*\.cpp"))
+(setq clean-buffer-list-kill-never-regexps  '("*\.cpp" "*\.hpp"))
